@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
@@ -25,6 +26,7 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info("helllo");
         $request->validate([
             'name' => 'required',
             'contact' => 'required'

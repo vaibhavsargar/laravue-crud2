@@ -5319,8 +5319,58 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "Directory"
+  name: "Directory",
+  data: function data() {
+    return {
+      lists: [],
+      item: {
+        name: "",
+        contact: ""
+      }
+    };
+  },
+  mounted: function mounted() {
+    this.fetchAll();
+  },
+  methods: {
+    fetchAll: function fetchAll() {
+      var _this = this;
+
+      axios.get('/api/contact').then(function (res) {
+        return _this.lists = res.data;
+      });
+    },
+    save: function save() {
+      try {
+        axios.post('/api/contact', this.item); // .then(response => {
+        // }
+        // );
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }
 });
 
 /***/ }),
@@ -28258,9 +28308,123 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n  This is a Directory Template\n")])
+  return _c("div", [
+    _c("div", { staticClass: "form-group" }, [
+      _c("label", { attrs: { for: "name" } }, [_vm._v("Name")]),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.item.name,
+            expression: "item.name",
+          },
+        ],
+        staticClass: "form-control",
+        attrs: {
+          type: "text",
+          name: "name",
+          id: "name",
+          placeholder: "Enter name",
+        },
+        domProps: { value: _vm.item.name },
+        on: {
+          input: function ($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(_vm.item, "name", $event.target.value)
+          },
+        },
+      }),
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "form-group" }, [
+      _c("label", { attrs: { for: "contact" } }, [_vm._v("Contact")]),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.item.contact,
+            expression: "item.contact",
+          },
+        ],
+        staticClass: "form-control",
+        attrs: {
+          type: "text",
+          name: "contact",
+          id: "contact",
+          placeholder: "Enter contact",
+        },
+        domProps: { value: _vm.item.contact },
+        on: {
+          input: function ($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(_vm.item, "contact", $event.target.value)
+          },
+        },
+      }),
+    ]),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-success btn-block my-2",
+        on: { click: _vm.save },
+      },
+      [_vm._v("Save")]
+    ),
+    _vm._v(" "),
+    _vm.lists.length > 0
+      ? _c("div", { staticClass: "col-md-8 offset-md-2" }, [
+          _c("h2", { staticClass: "text-center" }, [_vm._v("List")]),
+          _vm._v(" "),
+          _c(
+            "ul",
+            { staticClass: "list-group" },
+            _vm._l(_vm.lists, function (item) {
+              return _c(
+                "li",
+                { key: item.id, staticClass: "list-group-item" },
+                [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(item.name) +
+                      " - " +
+                      _vm._s(item.contact) +
+                      "\n            "
+                  ),
+                  _vm._m(0, true),
+                ]
+              )
+            }),
+            0
+          ),
+        ])
+      : _vm._e(),
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "float-right" }, [
+      _c("button", { staticClass: "btn btn-warning btn-sm mr-2" }, [
+        _vm._v("View"),
+      ]),
+      _vm._v(" "),
+      _c("button", { staticClass: "btn btn-danger btn-sm mr-2" }, [
+        _vm._v("Delete"),
+      ]),
+    ])
+  },
+]
 render._withStripped = true
 
 
