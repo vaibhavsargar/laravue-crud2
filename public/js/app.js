@@ -5339,6 +5339,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Directory",
   data: function data() {
@@ -5347,7 +5348,9 @@ __webpack_require__.r(__webpack_exports__);
       item: {
         name: "",
         contact: ""
-      }
+      },
+      temp_id: null,
+      isEditing: false
     };
   },
   mounted: function mounted() {
@@ -5362,10 +5365,45 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     save: function save() {
+      var _this2 = this;
+
       try {
-        axios.post('/api/contact', this.item); // .then(response => {
-        // }
-        // );
+        var method = axios.post;
+        var url = 'api/contact';
+
+        if (this.isEditing) {
+          method = axios.put;
+          url = "/api/contact/".concat(this.temp_id);
+        }
+
+        method(url, this.item).then(function (res) {
+          _this2.fetchAll();
+
+          _this2.item = {
+            name: "",
+            contact: ""
+          };
+          _this2.temp_id = null, _this2.isEditing = false;
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    edit: function edit(contact) {
+      this.item = {
+        name: contact.name,
+        contact: contact.contact
+      };
+      this.temp_id = contact.id;
+      this.isEditing = true;
+    },
+    deleteContact: function deleteContact(id) {
+      var _this3 = this;
+
+      try {
+        axios["delete"]("api/contact/".concat(id)).then(function (res) {
+          return _this3.fetchAll();
+        });
       } catch (e) {
         console.log(e);
       }
@@ -28377,7 +28415,7 @@ var render = function () {
         staticClass: "btn btn-success btn-block my-2",
         on: { click: _vm.save },
       },
-      [_vm._v("Save")]
+      [_vm._v(_vm._s(_vm.isEditing ? "Update" : "Save"))]
     ),
     _vm._v(" "),
     _vm.lists.length > 0
@@ -28393,13 +28431,39 @@ var render = function () {
                 { key: item.id, staticClass: "list-group-item" },
                 [
                   _vm._v(
-                    "\n            " +
+                    "\n                " +
                       _vm._s(item.name) +
                       " - " +
                       _vm._s(item.contact) +
-                      "\n            "
+                      "\n                "
                   ),
-                  _vm._m(0, true),
+                  _c("span", { staticClass: "float-right" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-warning btn-sm mr-2",
+                        on: {
+                          click: function ($event) {
+                            return _vm.edit(item)
+                          },
+                        },
+                      },
+                      [_vm._v("Edit")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger btn-sm mr-2",
+                        on: {
+                          click: function ($event) {
+                            return _vm.deleteContact(item.id)
+                          },
+                        },
+                      },
+                      [_vm._v("Delete")]
+                    ),
+                  ]),
                 ]
               )
             }),
@@ -28409,22 +28473,7 @@ var render = function () {
       : _vm._e(),
   ])
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "float-right" }, [
-      _c("button", { staticClass: "btn btn-warning btn-sm mr-2" }, [
-        _vm._v("View"),
-      ]),
-      _vm._v(" "),
-      _c("button", { staticClass: "btn btn-danger btn-sm mr-2" }, [
-        _vm._v("Delete"),
-      ]),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
